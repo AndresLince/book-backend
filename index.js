@@ -1,18 +1,11 @@
-const express = require('express')
-const cors = require('cors')
-require('dotenv').config()
+const AppHandler = require('./handlers/app.handler')
+const DatabaseHandler = require('./handlers/database/database.mysql.handler')
+const databaseHandler = new DatabaseHandler()
+const UserRepositoryMysql = require('./repositories/user.repository.mysql')
+const userRepositoryMysql = new UserRepositoryMysql({databaseHandler})
 
-//Create express server
-const app = express()
-
-//Configure cors
-app.use(cors())
-
-//Body read and parse
-app.use(express.json())
-
-//Routes
-app.use('/api/auth', require('./routes/auth.route'))
+const appHandler = new AppHandler({userRepositoryMysql})
+const app = appHandler.createApp()
 
 app.listen(process.env.PORT, () => {
     console.log('Server runnin on port: ' + process.env.PORT)
