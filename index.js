@@ -11,6 +11,9 @@ app.use(cors())
 //Body read and parse
 app.use(express.json())
 
+//Routes
+app.use('/api/auth', require('./routes/auth.route'))
+
 app.listen(process.env.PORT, () => {
     console.log('Server runnin on port: ' + process.env.PORT)
 });
