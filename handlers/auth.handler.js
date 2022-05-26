@@ -12,7 +12,6 @@ class AuthHandler {
         const user = await this.userRepository.getUserByEmail([email])
 
         if (user.length === 0) {
-            console.log(user)
             return this.httpUtilsHandler.sendBasicJsonResponse(response, 400, 'Usuario o contraseña incorrecta')
         }
 
