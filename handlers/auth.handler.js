@@ -15,7 +15,7 @@ class AuthHandler {
             return this.httpUtilsHandler.sendBasicJsonResponse(response, 400, 'Usuario o contraseña incorrecta')
         }
 
-        const userDatabase = user[0]
+        const userDatabase = user[0][0]
 
         const isValidPassword = this.securityHandler.validatePassword(password, userDatabase.password)
         if (!isValidPassword) {

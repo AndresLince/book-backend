@@ -8,7 +8,7 @@ class UserRepositoryMysql extends UserRepositoryInterface {
         this.getUserByEmail = this.getUserByEmail.bind(this)
     }
     async getUserByEmail(arrayParameters) {
-        const sql = `select id_user, password, verification_code, bad_request_number from m_User where email = ?`
+        const sql = `call searchUserByEmail(?);`
         return this.databaseHandler.getPool().query(sql, arrayParameters)
     }
 }
