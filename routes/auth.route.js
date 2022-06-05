@@ -6,12 +6,10 @@ const router = Router()
 const { check } = require('express-validator')
 
 class AuthRoute {
-    constructor({userRepositoryMysql}) {
+    constructor({userRepositoryMysql, securityHandler}) {
         const AuthHandler         = require('../handlers/auth.handler')
         const HttpUtilsHandler    = require('../handlers/http-utils.handler')
-        const SecurityHandler     = require('../handlers/security.handler')
         this.httpUtilsHandler     = new HttpUtilsHandler()
-        const securityHandler = new SecurityHandler()
         this.authHandler         = new AuthHandler({
             userRepository: userRepositoryMysql,
             httpUtilsHandler: this.httpUtilsHandler,
@@ -27,6 +25,10 @@ class AuthRoute {
             check('password', 'El password es obligatorio').not().isEmpty(),
             this.httpUtilsHandler.validateFields
         ], this.authHandler.login)
+        router.post('/google', [
+            check('token', 'El token de Google es obligatorio').not().isEmpty(),
+            this.httpUtilsHandler.validateFields
+        ], this.authHandler.googleSignIn)
         return router
     }
 }

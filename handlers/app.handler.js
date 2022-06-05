@@ -3,9 +3,9 @@ const cors = require('cors')
 require('dotenv').config()
 
 class AppHandler {
-    constructor({userRepositoryMysql}) {
+    constructor({userRepositoryMysql, securityHandler}) {
         const AuthRoute = require('../routes/auth.route')
-        this.authRoutes = new AuthRoute({userRepositoryMysql})
+        this.authRoutes = new AuthRoute({userRepositoryMysql, securityHandler})
     }
 
     createApp() {
