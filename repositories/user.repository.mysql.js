@@ -11,6 +11,12 @@ class UserRepositoryMysql extends UserRepositoryInterface {
         const sql = `call searchUserByEmail(?);`
         return this.databaseHandler.getPool().query(sql, arrayParameters)
     }
+    async createUser(arrayParameters) {
+        const sql = `call createUser(?, ?, ?, ?, ?, ?, @last_id)`
+        await this.databaseHandler.getPool().query(sql, arrayParameters)
+        const sql2 = `SELECT @last_id AS insertId`
+        return this.databaseHandler.getPool().query(sql2)
+    }
 }
 
 module.exports = UserRepositoryMysql;
