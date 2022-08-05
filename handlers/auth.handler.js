@@ -46,10 +46,10 @@ class AuthHandler {
                 const createdUser = await this.userRepository.createUser([name, encryptedPassword, email, 1, given_name, family_name])
 
                 userDatabase = createdUser[0]
+                userDatabase.id_user = createdUser[0].insertId
             }
 
-            const token = await this.securityHandler.generateJsonWebToken( userDatabase.insertId )
-
+            const token = await this.securityHandler.generateJsonWebToken( userDatabase.id_user )
             response.json({
                 token: token
             })
