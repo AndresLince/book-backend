@@ -5,6 +5,7 @@ class AuthHandler {
         this.securityHandler  = securityHandler
         this.login = this.login.bind(this)
         this.googleSignIn = this.googleSignIn.bind(this)
+        this.renewToken = this.renewToken.bind(this)
     }
 
     async login(request, response) {
@@ -45,17 +46,24 @@ class AuthHandler {
                 const createdUser = await this.userRepository.createUser([name, encryptedPassword, email, 1, given_name, family_name])
 
                 userDatabase = createdUser[0]
+                userDatabase.id_user = createdUser[0].insertId
             }
 
-            const token = await this.securityHandler.generateJsonWebToken( userDatabase.insertId )
-
+            const token = await this.securityHandler.generateJsonWebToken( userDatabase.id_user )
             response.json({
-                ok: true,
                 token: token
             })
         } catch (error) {
             return this.httpUtilsHandler.sendBasicJsonResponse(response, 401, 'Token no es correcto')
         }
+    }
+    async renewToken(request, response) {
+        const uid = request.uid
+        //generar el token jwt
+        const token = await this.securityHandler.generateJsonWebToken(uid)
+        response.status(200).send({
+            token: token
+        })
     }
 }
 

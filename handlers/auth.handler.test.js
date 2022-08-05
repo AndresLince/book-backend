@@ -45,6 +45,9 @@ createUser = jest.fn( params => {
         { insertId: 1 }
     ]
 })
+validateJsonWebToken = jest.fn( params => {
+    return true;
+})
 
 const userRepositoryMysql = {
     getUserByEmail,
@@ -54,9 +57,16 @@ const securityHandler = {
     validatePassword,
     generateJsonWebToken,
     googleVerify,
-    encryptPassword
+    encryptPassword,
+    validateJsonWebToken
 }
-const appHandler = new AppHandler({userRepositoryMysql, securityHandler})
+const bookRepository = {
+
+}
+const readedBookRepository = {
+
+}
+const appHandler = new AppHandler({userRepositoryMysql, securityHandler, bookRepository, readedBookRepository})
 const app = appHandler.createApp()
 describe('Login tests', () => {
     it('Should return 400 bad request No body parameters', () => {

@@ -19,6 +19,23 @@ class SecurityHandler {
             })
         })
     }
+    validateJsonWebToken(request, response, next) {
+        const token = request.header('x-token')
+        if (!token) {
+            return response.status(401).json()
+        }
+        try {
+            const { uid } = jwt.verify(token ,process.env.JWT_SECRET)
+            request.uid = uid;
+
+            next()
+        } catch (error) {
+            return response.status(400).json({
+                ok:false,
+                message:'Token incorrecto'
+            })
+        }
+    }
     encryptPassword(password) {
         const salt = bcrypt.genSaltSync()
         return bcrypt.hashSync(password, salt)

@@ -10,6 +10,7 @@ class AuthRoute {
         const AuthHandler         = require('../handlers/auth.handler')
         const HttpUtilsHandler    = require('../handlers/http-utils.handler')
         this.httpUtilsHandler     = new HttpUtilsHandler()
+        this.securityHandler      = securityHandler
         this.authHandler         = new AuthHandler({
             userRepository: userRepositoryMysql,
             httpUtilsHandler: this.httpUtilsHandler,
@@ -29,6 +30,10 @@ class AuthRoute {
             check('token', 'El token de Google es obligatorio').not().isEmpty(),
             this.httpUtilsHandler.validateFields
         ], this.authHandler.googleSignIn)
+        router.get('/renew',
+        [
+            this.securityHandler.validateJsonWebToken
+        ], this.authHandler.renewToken)
         return router
     }
 }
