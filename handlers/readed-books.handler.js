@@ -9,7 +9,7 @@ class ReadedBooksHandler {
     }
     async create(request, response) {
         const uid = request.uid
-        const { title, id, pageCount, author } = request.body
+        const { title, id, pageCount, author, thumbnail } = request.body
         // TODO sanitize inputs
         try {
             const authorResponse =  await this.authorRepository.searchAuthor([author])
@@ -22,7 +22,7 @@ class ReadedBooksHandler {
             const bookResponse = await this.bookRepository.searchBook([id])
             let bookId = bookResponse[0][0] ? bookResponse[0][0].id_book: ''
             if (bookResponse[0].length === 0) {
-                const createdModel = await this.bookRepository.createBook([title, pageCount, id, authorId])
+                const createdModel = await this.bookRepository.createBook([title, pageCount, id, authorId, thumbnail])
                 bookId = createdModel[0].insertId
             }
 
