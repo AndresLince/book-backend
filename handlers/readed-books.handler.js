@@ -1,21 +1,28 @@
 class ReadedBooksHandler {
-    constructor({ httpUtilsHandler, securityHandler, bookRepository, readedBookRepository }) {
+    constructor({ httpUtilsHandler, securityHandler, bookRepository, readedBookRepository, authorRepository }) {
         this.httpUtilsHandler = httpUtilsHandler
         this.securityHandler  = securityHandler
         this.bookRepository   = bookRepository
         this.readedBookRepository = readedBookRepository
+        this.authorRepository = authorRepository
         this.create = this.create.bind(this)
     }
     async create(request, response) {
         const uid = request.uid
-        const { title, id } = request.body
+        const { title, id, pageCount, author } = request.body
         // TODO sanitize inputs
         try {
+            const authorResponse =  await this.authorRepository.searchAuthor([author])
+            let authorId = authorResponse[0][0] ? authorResponse[0][0].id_author: ''
+            if (authorResponse[0].length === 0) {
+                const createdModel = await this.authorRepository.createAuthor([author])
+                authorId = createdModel[0].insertId
+            }
 
             const bookResponse = await this.bookRepository.searchBook([id])
-            let bookId = bookResponse[0][0] ? bookResponse[0][0].id_book: '';
+            let bookId = bookResponse[0][0] ? bookResponse[0][0].id_book: ''
             if (bookResponse[0].length === 0) {
-                const createdModel = await this.bookRepository.createBook([title, 2, id])
+                const createdModel = await this.bookRepository.createBook([title, pageCount, id, authorId])
                 bookId = createdModel[0].insertId
             }
 

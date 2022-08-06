@@ -7,10 +7,12 @@ const BookRepositoryMysql = require('./repositories/book.repository.mysql')
 const bookRepository = new BookRepositoryMysql({databaseHandler})
 const ReadedBookRepositoryMysql = require('./repositories/readed-book.repository.mysql')
 const readedBookRepository = new ReadedBookRepositoryMysql({databaseHandler})
+const AuthorRepositoryMysql = require('./repositories/author.repository.mysql')
+const authorRepository = new AuthorRepositoryMysql({databaseHandler})
 const SecurityHandler = require('./handlers/security.handler')
 const securityHandler = new SecurityHandler()
 
-const appHandler = new AppHandler({userRepositoryMysql, securityHandler, bookRepository, readedBookRepository})
+const appHandler = new AppHandler({userRepositoryMysql, securityHandler, bookRepository, readedBookRepository, authorRepository})
 const app = appHandler.createApp()
 
 app.listen(process.env.PORT, () => {

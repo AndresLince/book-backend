@@ -3,7 +3,7 @@ const cors = require('cors')
 require('dotenv').config()
 
 class AppHandler {
-    constructor({userRepositoryMysql, securityHandler, bookRepository, readedBookRepository}) {
+    constructor({userRepositoryMysql, securityHandler, bookRepository, readedBookRepository, authorRepository}) {
         const AuthRoute = require('../routes/auth.route')
         const ReadedBookRoute = require('../routes/readed-book.route')
         const ReadedBooksHandler = require('../handlers/readed-books.handler')
@@ -13,7 +13,8 @@ class AppHandler {
             bookRepository: bookRepository,
             httpUtilsHandler: this.httpUtilsHandler,
             securityHandler: securityHandler,
-            readedBookRepository: readedBookRepository
+            readedBookRepository: readedBookRepository,
+            authorRepository: authorRepository
         })
         this.authRoutes = new AuthRoute({userRepositoryMysql, securityHandler})
         this.readedBookRoutes = new ReadedBookRoute({securityHandler, readedBooksHandler})
