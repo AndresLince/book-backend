@@ -16,6 +16,14 @@ class ReadedBookRepositoryMysql extends ReadedBookRepositoryInterface {
         const sql2 = `SELECT @last_id AS insertId`
         return this.databaseHandler.getPool().query(sql2)
     }
+    async searchReadedBooks(arrayParameters) {
+        const sql = `call searchReadedBooks(?, ?, ?);`
+        return this.databaseHandler.getPool().query(sql, arrayParameters)
+    }
+    async countSearchReadedBooks(arrayParameters) {
+        const sql = `call countSearchReadedBooks(?, ?, ?);`
+        return this.databaseHandler.getPool().query(sql, arrayParameters)
+    }
 }
 
 module.exports = ReadedBookRepositoryMysql;

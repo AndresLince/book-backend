@@ -6,6 +6,7 @@ class ReadedBooksHandler {
         this.readedBookRepository = readedBookRepository
         this.authorRepository = authorRepository
         this.create = this.create.bind(this)
+        this.getAll = this.getAll.bind(this)
     }
     async create(request, response) {
         const uid = request.uid
@@ -40,6 +41,21 @@ class ReadedBooksHandler {
             console.log(error)
             return this.httpUtilsHandler.sendBasicJsonResponse(response, 400, 'Error en el sistema por favor vuelve a intentar mas tarde')
         }
+    }
+
+    async getAll(request, response) {
+        const uid = request.uid
+        const { q, startIndex } = request.query
+
+        const readedBookResponse = await this.readedBookRepository.searchReadedBooks([uid, q, startIndex])
+        const countReadedBookResponse = await this.readedBookRepository.countSearchReadedBooks([uid, q, startIndex])
+        const books = readedBookResponse[0]
+        const totalItems = countReadedBookResponse[0][0].totalItems
+
+        response.status(200).send({
+            books: books,
+            totalItems: totalItems
+        })
     }
 }
 
