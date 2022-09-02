@@ -48,13 +48,16 @@ class ReadedBooksHandler {
         const { q, startIndex } = request.query
 
         const readedBookResponse = await this.readedBookRepository.searchReadedBooks([uid, q, startIndex])
-        const countReadedBookResponse = await this.readedBookRepository.countSearchReadedBooks([uid, q, startIndex])
+        const countReadedBookResponse = await this.readedBookRepository.countSearchReadedBooks([uid, q])
         const books = readedBookResponse[0]
-        const totalItems = countReadedBookResponse[0][0].totalItems
+        const totalItems = countReadedBookResponse[0][0]? countReadedBookResponse[0][0].totalItems: 0
+
+        const last_id = books[books.length - 1]? books[books.length - 1].id_readed_book: 0
 
         response.status(200).send({
             books: books,
-            totalItems: totalItems
+            totalItems: totalItems,
+            last_id: last_id
         })
     }
 }

@@ -21,7 +21,7 @@ class ReadedBookRepositoryMysql extends ReadedBookRepositoryInterface {
         return this.databaseHandler.getPool().query(sql, arrayParameters)
     }
     async countSearchReadedBooks(arrayParameters) {
-        const sql = `call countSearchReadedBooks(?, ?, ?);`
+        const sql = `call countSearchReadedBooks(?, ?);`
         return this.databaseHandler.getPool().query(sql, arrayParameters)
     }
 }
