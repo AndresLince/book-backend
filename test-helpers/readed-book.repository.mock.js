@@ -10,9 +10,38 @@ createReadedBook = jest.fn( params => {
 
 })
 
+searchReadedBooks = jest.fn( params => {
+    console.log(params[1])
+    if (params[1] == 'error') {
+        throw 'error';
+    }
+    if (params[1] == 'empty') {
+        return [[
+
+        ]]
+    }
+    return [[
+        { id_readed_book: 1 }
+    ]]
+})
+
+countSearchReadedBooks = jest.fn( params => {
+    if (params[1] == 'empty') {
+        return [[
+            {}
+        ]]
+    }
+    return [
+        { totalItems: 10 }
+    ]
+})
+
+
 const readedBookRepository = {
     searchReadedBook,
-    createReadedBook
+    createReadedBook,
+    searchReadedBooks,
+    countSearchReadedBooks
 }
 
 module.exports = {

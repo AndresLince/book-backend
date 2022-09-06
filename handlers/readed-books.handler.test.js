@@ -34,4 +34,54 @@ describe('Readed book tests', () => {
             }
         ).expect(409)
     })
+    it('Should return 400 create a readed book', () => {
+        return request(app).post('/api/readed-book/').send(
+            {
+                'title': 'title',
+                'id': '2',
+                'pageCount': 'pageCount',
+                'author': 'error',
+                'thumbnail': 'thumbnail',
+            }
+        ).expect(400)
+    })
+})
+
+describe('Readed books tests', () => {
+    it('Get all readed books should work', () => {
+        return request(app).get('/api/readed-books/?q=query')
+            .set(
+                {'x-token': 'mytokennewuser'}
+            ).then((response) => {
+                expect(response.body).toEqual(
+                    expect.objectContaining({
+                        totalItems: expect.any(Number),
+                        last_id: expect.any(Number),
+                        books: expect.any(Array)
+                    })
+                )
+                expect(response.status).toEqual(200)
+            })
+    })
+    it('Get all readed books should fail', () => {
+        return request(app).get('/api/readed-books/?q=empty')
+            .set(
+                {'x-token': 'mytokennewuser'}
+            ).then((response) => {
+                expect(response.body).toEqual(
+                    expect.objectContaining({
+                        books: expect.any(Array),
+                    })
+                )
+                expect(response.status).toEqual(200)
+            })
+    })
+    it('Get all readed books Should return 400', () => {
+        return request(app).get('/api/readed-books/?q=error')
+            .set(
+                {'x-token': 'mytokennewuser'}
+            ).then((response) => {
+                expect(response.status).toEqual(400)
+            })
+    })
 })

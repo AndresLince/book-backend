@@ -3,6 +3,9 @@ searchAuthor = jest.fn( params => {
     if (author === 'author1') {
         return [[]]
     }
+    if (author === 'error') {
+        throw 'error';
+    }
     return [[{ id_author: '1' }]]
 })
 
