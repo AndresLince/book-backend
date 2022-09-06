@@ -45,8 +45,8 @@ createUser = jest.fn( params => {
         { insertId: 1 }
     ]
 })
-validateJsonWebToken = jest.fn( params => {
-    return true;
+validateJsonWebToken = jest.fn( (request, response, next) => {
+    next()
 })
 
 const userRepositoryMysql = {
@@ -130,6 +130,19 @@ describe('Google tests', () => {
                         token: expect.any(String),
                     })
                 )
+            })
+    })
+    it('Should return 200 successful login with new user', () => {
+        return request(app).get('/api/auth/renew')
+            .set(
+                {'x-token': 'mytokennewuser'}
+            ).then((response) => {
+                expect(response.body).toEqual(
+                    expect.objectContaining({
+                        token: expect.any(String),
+                    })
+                )
+                expect(response.status).toEqual(200)
             })
     })
 })
